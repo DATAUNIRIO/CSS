@@ -1,0 +1,16 @@
+html,body {
+  font-family: 'Roboto', sans-serif;
+  padding: 1em 2em;
+  font-size: 18px;
+  color: #000
+}
+
+h1 {
+  font-weight: 200;
+  letter-spacing: -2px;
+  font-size: 3.5em;
+}
+
+h1 span {
+  font-weight: 800;
+}

@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html, body {
+   width: 100%;
+   height: 100%;
+}
+
+body {
+   font-family: 'Roboto', sans-serif;
+  color: whitesmoke;
+  overflow: hidden;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-color: #0b7aa2;
+   text-shadow: 0 1px black;
+/*     */
+}
+span {
+    border-bottom: 7px solid whitesmoke;
+/*   box-shadow: inset 0px -4px whitesmoke; */
+  width: 14px;
+  display: block;
+  position: relative;
+  bottom: 0;
+  float: left;
+}
+div {
+  float: left;
+}
+div:before {
+  display: block;
+  position: relative;
+  bottom: 0;
+  content: "";
+   font-weight: bold;
+   font-size: 2em;
+  animation: type 1.4s 0.25s ease-in-out infinite alternate;
+}
+
+@keyframes type {
+  5% {
+    content: "H";
+  }
+
+  10% {
+    content: "Hi";
+  }
+  15% {
+    content: "Hi,";
+  }
+  20% {
+    content: "Hi, ";
+  }
+  25% {
+    content: "Hi, t";
+  }
+  30% {
+    content: "Hi, th";
+  }
+   35% {
+      content: "Hi, the";
+   }
+   40% {
+      content: "Hi, ther";
+   }
+   45% {
+      content: "Hi, there";
+   }
+   50% {
+      content: "Hi, there ";
+   }
+   55% {
+      content: "Hi, there s";
+   }
+   60% {
+      content: "Hi, there st";
+   }
+   65% {
+      content: "Hi, there str";
+   }
+   70% {
+      content: "Hi, there stra";
+   }
+   75% {
+      content: "Hi, there stran";
+   }
+   80% {
+      content: "Hi, there strang";
+   }
+   85% {
+      content: "Hi, there strang";
+   }
+   90% {
+      content: "Hi, there strange";
+   }
+   95% {
+      content: "Hi, there stranger";
+   }
+   100% {
+      content: "Hi, there stranger!";
+   }
+}
