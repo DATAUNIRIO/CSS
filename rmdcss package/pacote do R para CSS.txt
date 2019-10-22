@@ -1,3 +1,10 @@
 Fonte dos CSS para Rmarkdown
 
 https://github.com/nwstephens/rmdcss
+
+Pimp my RMD: a few tips for R Markdown
+https://holtzy.github.io/Pimp-my-rmd/
+
+Customize the document appearance using a template. Two packages offer several templates:
+1. prettydoc by Yixuan Qiu
+2. rmdformats by Julien Barnier. It provides several templates, like readthedown:
