@@ -1,0 +1,45 @@
+blockquote {
+    position: relative;
+    font-weight: 800;
+    color: #e91e63;
+    padding: 30px 0;
+    width: 100%;
+    max-width: 500px;
+    z-index: 1;
+    margin: 80px auto;
+    align-self: center;
+    border-top: solid 4px #e91e63;
+    box-shadow: 0 12px 35px -11px rgba(0,0,0,0.4);
+    text-align: center;
+    border-radius: 4px;
+    transition: all 1s;
+}
+blockquote:after {
+    font: normal normal normal 14px/1 FontAwesome;
+    position: absolute;
+    content: "\f10d";
+    color: rgb(233, 30, 99);
+    font-size: 4rem;
+    line-height: 0;
+    top: -10px;
+    left: 30px;
+}
+blockquote:before {
+    font: normal normal normal 14px/1 FontAwesome;
+    position: absolute;
+    content:"\f10e";
+    color: #e91e63;
+    font-size: 4rem;
+    line-height: 0;
+    bottom: -10px;
+    right: 30px;
+}
+blockquote:hover{
+    background: #2d213f;
+    color: #fff;
+}
+
+body{
+  font-family:font-najiri;
+  direction:rtl;
+}
