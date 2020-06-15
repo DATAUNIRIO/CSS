@@ -1,0 +1,76 @@
+body { 
+  background: #1d152d;
+  color: #d6664f;
+}
+
+/* center the blockquote in the page */
+.blockquote-wrapper {
+   display: flex;
+   height: 100vh;
+}
+
+/* Blockquote main style */
+.blockquote {
+    position: relative;
+    font-family: 'Work Sans', sans-serif;
+    width: 100%;
+    max-width: 85vw;
+    z-index: 1;
+    margin: auto;
+}
+
+/* Blockquote header */
+.blockquote h1 {
+    position: relative;
+    margin: 0;
+    font-weight: 300;
+    font-size: 9vw;
+    text-transform: uppercase;
+    line-height: 0.8;
+    word-break: break-all;
+}
+
+.blockquote h1 b {
+    font-weight: 800;
+}
+
+.blockquote h1 span {
+    font-weight: 300;
+    font-size: 7vw;
+    vertical-align: top;
+    color:#ffad9c;
+}
+
+
+b, strong {
+  font-weight: 800;
+}
+
+
+/* Blockquote subheader */
+.blockquote h4 {
+    position: relative;
+    color: #4dbfd5;
+    text-transform: uppercase;
+    font-size: 4vw;
+    font-weight: normal;
+    line-height: 1;
+    letter-spacing: 5px;
+    margin: 0;
+    padding: 20px 0;
+}
+
+@media all and (min-width:690px) {
+  .blockquote {
+    max-width: 590px;
+  }
+  .blockquote h1 {
+     font-size: 64px;
+  }
+  .blockquote h4 {
+     font-size: 28px;
+  }
+  .blockquote h1 span {
+    font-size: 48px;
+  }
+}
