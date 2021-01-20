@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Serif&display=swap');
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+html {
+  font-family: 'IBM Plex Serif', serif;
+}
+body {
+  display: flex;
+  box-sizing: border-box;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background-image: url(https://images.unsplash.com/photo-1586197706654-5dafb68d063b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ);
+  background-size: cover;
+}
+section {
+  width: 60vw;
+/*   backdrop-filter: blur(10px); */
+  background-color: hsla(0, 0%, 0%, 0.75);
+  border: 1q solid hsla(0, 0%, 100%, 0.25);
+  box-shadow: 0 0 4px 2px hsla(0, 0%, 0%, 0.5);
+  padding: 2vw;
+}
+p {
+  color: hsla(0, 0%, 100%, 0.85);
+  font-size: 4vw;
+/*   font-size: var(--fontsize); */
+}

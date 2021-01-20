@@ -1,0 +1,569 @@
+// Colors
+$background-color: #141518;
+$tan: #d5bb97;
+$black: #000103;
+$brick: #9c3131;
+$gray: #867a63;
+$gray-stripes: repeating-linear-gradient(
+  90deg,
+  $gray,
+  $gray 1px,
+  lighten($gray, 15%) 1px,
+  lighten($gray, 15%) 2px
+);
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: $background-color;
+}
+
+// Align everything center, hide overflow
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  overflow: hidden;
+
+  // This zoom out effect is basically for the preview that frozes te thumbnail halfway
+  animation-duration: 3s;
+  animation-name: zoom-out;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes zoom-out {
+  from {
+    transform: scale(2);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+$size: 30px;
+
+// Dear CodePen, it's a pity that SCSS modules don't work :(
+// @use "sass:math";
+// $column-width: math.floor(math.cos(45deg) * 4 * $size);
+// $row-height: math.floor(($size * 2 + math.sin(45deg) * 4 * $size) / 2);
+$column-width: $size * 56 / 20;
+$row-height: $size * 48 / 20;
+
+.frame {
+  // Add a frame that's smaller than it's content
+  // therfore it's border will mask the content
+  // (content also needs to have a negative z-index in order for this to work)
+  border: $size * 4 solid $background-color;
+  $number-of-columns: 15;
+  $number-of-rows: 13;
+  width: $column-width * ($number-of-columns - 1);
+  height: $row-height * ($number-of-rows - 1);
+}
+
+.row {
+  display: flex; // inline block without the annoying things
+
+  // The whole content is a bit shifted to get a cut by the frame
+  position: relative;
+  left: -$column-width/2;
+  top: -$row-height/2;
+  z-index: -1;
+
+  // Every second row needs to be a bit shifted in order to get the hexagon shape
+  &:nth-child(2n) {
+    margin-left: $column-width / 2;
+  }
+}
+
+// This is only here to make debugging easier
+// You can select this element in Google Chrome element inspector and see how it looks before transforming
+.cube-holder {
+  width: $column-width;
+  height: $row-height;
+}
+
+// An inverse cube with at least 3 sides rotated in 3D
+.inverse-cube {
+  width: inherit;
+  height: inherit;
+  transform-origin: center center;
+  transform-style: preserve-3d;
+  transform: rotateX(-35deg) rotateY(-45deg); // Base rotation
+
+  // The transformation origin for the sides is the center, so make sure they are centered
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .side {
+    // The exact position of each side depends on the pattern
+    // The positions are set at the bottom
+    position: absolute;
+  }
+}
+
+/*
+
+  ╱│╲
+ ╱ │ ╲
+│ ╱ ╲ │
+│╱   ╲│
+ ╲   ╱
+  ╲ ╱
+
+*/
+@mixin base-walls($floor-color, $with-mini-roof) {
+  .side:nth-child(1) {
+    // Bottom
+    transform: rotateX(90deg) translateZ(-$size);
+    background: $floor-color;
+    width: $size * 2;
+    height: $size * 2;
+  }
+  .side:nth-child(2) {
+    // Right
+    transform: translateZ(-$size);
+    background: $tan;
+    width: $size * 2;
+    height: $size * 2;
+  }
+  .side:nth-child(3) {
+    // Left
+    transform: rotateY(90deg) rotateZ(90deg) translateZ(-$size);
+    background: $black;
+    width: $size * 2;
+    height: $size * 2;
+  }
+
+  @if $with-mini-roof {
+    @include mini-roof();
+  }
+}
+
+/*
+
+  ╱│╲
+  ╲│╱
+
+*/
+@mixin mini-roof() {
+  .side:nth-child(1)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: $size;
+    height: $size;
+    background: linear-gradient(
+      45deg,
+      $black 0%,
+      $black 50%,
+      $tan 50%,
+      $tan 100%
+    );
+  }
+}
+
+/*
+
+  ▘
+
+*/
+@mixin window($left, $top, $width, $heigth) {
+  content: "";
+  position: absolute;
+  left: $size/4;
+  top: $size/2;
+  width: $size/2.5;
+  height: $size/1.25;
+  background: linear-gradient(
+    -45deg,
+    $gray 0%,
+    $gray 33%,
+    $black 33%,
+    $black 100%
+  );
+}
+
+/*
+
+   ╱│╲
+ ╱  │  ╲
+│  ╱ ╲  │
+│╱     ╲│
+ ╲     ╱
+   ╲ ╱
+
+*/
+// The most simple variation
+@mixin variant-a($floor-color, $with-mini-roof) {
+  @include base-walls($floor-color, $with-mini-roof);
+}
+
+/*
+
+   ╱│╲
+ ╱ ╱ ╲ ╲
+│ │╲ ╱│ │
+│╱ ╲│╱ ╲│
+ ╲     ╱
+   ╲ ╱
+
+*/
+// With a small cube inside
+@mixin variant-b($with-mini-roof) {
+  @include base-walls($gray-stripes, $with-mini-roof);
+
+  // Small cube in the middle
+  .side:nth-child(4) {
+    // Top
+    transform: rotateX(90deg) translateX(-$size/2) translateY(-$size/2);
+    background: #9c3131;
+    width: $size;
+    height: $size;
+  }
+  .side:nth-child(5) {
+    // Left
+    transform: translateX(-$size/2) translateY($size/2);
+    background: $tan;
+    width: $size;
+    height: $size;
+  }
+  .side:nth-child(6) {
+    // Right
+    transform: rotateY(90deg) translateX($size/2) translateY($size/2);
+    background: $black;
+    width: $size;
+    height: $size;
+  }
+}
+
+/*
+
+   ╱│╲
+ ╱  │  ╲
+│  ╱ ╱╲ │
+│╱ ╱   ╱│
+ ╲│╲ ╱ ╱
+   ╲│╱
+
+*/
+// With a long cube and windows
+@mixin variant-c() {
+  @include base-walls($gray-stripes, false);
+
+  .side:nth-child(3) {
+    // Set gray stripes to the left side
+    background: $gray-stripes;
+  }
+
+  // Big window
+  .side:nth-child(2)::after {
+    @include window($size/4, $size/2, $size/2.5, $size/1.25);
+  }
+
+  // Long cube
+  .side:nth-child(4) {
+    // Top
+    transform: rotateX(90deg) translateX($size/2);
+    background: #9c3131;
+    width: $size;
+    height: $size * 2;
+  }
+  .side:nth-child(5) {
+    // Left
+    transform: translateX($size/2) translateY($size/2) translateZ($size);
+    background: $tan;
+    width: $size;
+    height: $size;
+  }
+
+  // Small window
+  .side:nth-child(5)::after {
+    @include window($size/3, $size/4, $size/3, $size/1.5);
+  }
+
+  .side:nth-child(6) {
+    // Right
+    transform: rotateY(90deg) translateY($size/2) translateZ($size);
+    background: $black;
+    width: $size * 2;
+    height: $size;
+  }
+}
+
+/*
+
+   ╱│╲
+ ╱  │  ╲
+│╱ ╲ ╲  │
+│╲ ╱│  ╲│
+ ╲│╱   ╱
+   ╲ ╱
+
+*/
+// With a small cube on the side
+@mixin variant-d($floor-color, $small-cube-top) {
+  @include base-walls($floor-color, false);
+
+  // Small cube on the side
+  .side:nth-child(4) {
+    // Top
+    transform: rotateX(90deg) translateX(-$size/2) translateY($size/2);
+    background: $small-cube-top;
+    width: $size;
+    height: $size;
+  }
+  .side:nth-child(5) {
+    // Left
+    transform: translateX(-$size/2) translateY($size/2) translateZ($size);
+    background: $tan;
+    width: $size;
+    height: $size;
+  }
+
+  .side:nth-child(6) {
+    // Right
+    transform: rotateY(90deg) translateX(-$size/2) translateY($size/2);
+    background: $black;
+    width: $size;
+    height: $size;
+  }
+}
+
+/*
+
+   ╱│╲ ╱│╲
+ ╱  │ │ │  ╲
+│  ╱ ╲│╱ ╲  │╲
+│╱         ╲│  ╲
+ ╲             ╱
+   ╲         ╱
+     ╲     ╱
+       ╲ ╱
+*/
+
+// First part of the tricky ones (only works in pair with it's second part)
+// The two parts have a common foundation defined here
+// It is expected that both it's second part and the next row covers part of it
+@mixin variant-e1($floor-color, $window) {
+  .side:nth-child(1) {
+    // Bottom
+    transform: rotateX(90deg) translateX($size) translateY(-$size)
+      translateZ(-$size);
+    background: $floor-color;
+    width: $size * 4;
+    height: $size * 4;
+  }
+
+  .side:nth-child(2) {
+    // Right
+    transform: translateX(-$size/2) translateZ(-$size);
+    background: $tan;
+    width: $size;
+    height: $size * 2;
+  }
+  .side:nth-child(3) {
+    // Right overflow
+    transform: rotateY(90deg) translateX($size * 1.5);
+    background: $black;
+    width: $size;
+    height: $size * 2;
+  }
+  .side:nth-child(4) {
+    // Right overflow 2
+    transform: translateX($size) translateZ(-$size * 2);
+    background: $tan;
+    width: $size * 2;
+    height: $size * 2;
+  }
+  .side:nth-child(5) {
+    // Left
+    transform: rotateY(90deg) translateZ(-$size);
+    background: $black;
+    width: $size * 2;
+    height: $size * 2;
+  }
+
+  @if $window {
+    // Big window
+    .side:nth-child(4)::after {
+      @include window($size/4, $size/2, $size/2.5, $size/1.25);
+    }
+  }
+}
+
+/*
+
+   ╱│╲
+  │╱ ╲ ╲
+   ╲ ╱│ │
+    │╱ ╲│
+
+
+
+*/
+// Second part of the tricky one (only works in pair with it's first part)
+// The two parts have a common foundation defined at the first part
+// The left side of the small box is also overflowing from the first part
+@mixin variant-e2() {
+  .side:nth-child(1) {
+    // Right
+    transform: translateZ(-$size);
+    background: $tan;
+    width: $size * 2;
+    height: $size * 2;
+  }
+  .side:nth-child(2) {
+    // Left
+    transform: rotateY(90deg) translateX($size/2) translateY(-$size/2)
+      translateZ(-$size);
+    background: $black;
+    width: $size;
+    height: $size;
+  }
+
+  // Small cube
+  .side:nth-child(3) {
+    // Top
+    transform: rotateX(90deg) translateX(-$size/2) translateY(-$size/2);
+    background: #9c3131;
+    width: $size;
+    height: $size;
+  }
+  .side:nth-child(4) {
+    // Right
+    transform: rotateY(90deg) translateX($size/2) translateY($size/2);
+    background: $black;
+    width: $size;
+    height: $size;
+  }
+}
+
+// First row
+.row:nth-child(4n-3) .cube-holder:nth-child(3n-2) .inverse-cube {
+  @include variant-a($brick, true);
+}
+.row:nth-child(4n-3) .cube-holder:nth-child(6n-4) .inverse-cube {
+  @include variant-e1($brick, false);
+}
+.row:nth-child(4n-3) .cube-holder:nth-child(6n-1) .inverse-cube {
+  @include variant-e1($gray-stripes, true);
+}
+.row:nth-child(4n-3) .cube-holder:nth-child(3n-0) .inverse-cube {
+  @include variant-e2();
+}
+
+// Second row
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-4) .inverse-cube,
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-0) .inverse-cube {
+  @include variant-a($gray-stripes, false);
+}
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-3) .inverse-cube,
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-1) .inverse-cube {
+  @include variant-a($brick, false);
+}
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-5) .inverse-cube {
+  @include variant-b(true);
+}
+.row:nth-child(4n-2) .cube-holder:nth-child(6n-2) .inverse-cube {
+  @include variant-b(false);
+}
+
+// Third row
+.row:nth-child(4n-1) .cube-holder:nth-child(3n-2) .inverse-cube {
+  @include variant-a($gray-stripes, false);
+}
+.row:nth-child(4n-1) .cube-holder:nth-child(3n-1) .inverse-cube {
+  @include variant-a($brick, false);
+}
+.row:nth-child(4n-1) .cube-holder:nth-child(3n-0) .inverse-cube {
+  @include variant-c();
+}
+
+// Forth row
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-5) .inverse-cube {
+  @include variant-a($gray-stripes, false);
+}
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-4) .inverse-cube {
+  @include variant-a($brick, false);
+}
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-3) .inverse-cube {
+  @include variant-d($gray-stripes, $brick);
+}
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-2) .inverse-cube {
+  @include variant-a($brick, true);
+}
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-1) .inverse-cube {
+  @include variant-a($brick, false);
+}
+.row:nth-child(4n-0) .cube-holder:nth-child(6n-0) .inverse-cube {
+  @include variant-d($brick, $gray-stripes);
+}
+
+// From the fifth row the pattern repeats
+
+#youtube {
+  display: none;
+}
+@media (min-height: 425px) {
+  /** Youtube logo by https://codepen.io/alvaromontoro */
+  #youtube {
+    z-index: 2;
+    display: block;
+    width: 100px;
+    height: 70px;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    background: red;
+    border-radius: 50% / 11%;
+    transform: scale(0.8);
+    transition: transform 0.5s;
+  }
+
+  #youtube:hover,
+  #youtube:focus {
+    transform: scale(0.9);
+  }
+
+  #youtube::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 7.5%;
+    left: -6%;
+    width: 112%;
+    height: 85%;
+    background: red;
+    border-radius: 9% / 50%;
+  }
+
+  #youtube::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    width: 45px;
+    height: 30px;
+    border: 15px solid transparent;
+    box-sizing: border-box;
+    border-left: 30px solid white;
+  }
+
+  #youtube span {
+    font-size: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+}
