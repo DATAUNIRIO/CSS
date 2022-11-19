@@ -1,0 +1,47 @@
+body {
+  background: #E3F2FD;
+  font-family: "system-ui";
+}
+
+.wrapper {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0 1rem #BBDEFB;
+}
+
+h1 {
+  font-size: 2.4rem;
+}
+
+p {
+  font-size: 1.8rem;
+  line-height: 1.5em;
+  margin: 0.2em 0 0.6em;
+}
+
+mark {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  background: transparent;
+}
+
+mark::after {
+  content: '';
+  position: absolute;
+  display: block;
+  z-index: -1;
+  top: 0;
+  left: -2px;
+  bottom: 0;
+  width: 0;
+  transition: width 0.6s ease-in-out 0.2s;
+  background: #B3E5FC;
+}
+
+mark.visible::after {
+  width: calc( 100% + 4px);
+}
